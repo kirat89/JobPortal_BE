@@ -166,3 +166,93 @@ app/tests/ — Automated tests, ideally using pytest.
 alembic/ — Database migration scripts.
 
 env and config files — For environment variables and tooling.
+
+
+🛠️ Alembic Migration Guide
+This guide outlines how to use Alembic for managing database migrations in this project.
+
+✅ Setup (Already Configured)
+Ensure:
+
+alembic is listed in dev-requirements.txt
+
+Alembic has been initialized (alembic/ directory and alembic.ini exist)
+
+alembic/env.py is configured to recognize your models:
+
+python
+
+from app.models.base import Base
+import models  # This ensures all models are registered with the Base
+
+target_metadata = Base.metadata
+
+
+🔁 Workflow for Model Changes
+Use this whenever you add/update/remove a model or field.
+
+🔨 Steps
+Update your model(s) inside models/.
+
+Ensure new models are imported in models/__init__.py.
+
+Run the autogeneration command:
+
+bash
+
+alembic revision --autogenerate -m "your message here"
+
+Review the generated migration file in alembic/versions/.
+
+Apply it to your local DB:
+
+bash
+
+alembic upgrade head
+
+🧰 Common Commands
+Task	                            Command
+Generate new migration	          alembic revision --autogenerate -m "your message"
+Apply migrations	                alembic upgrade head
+Roll back latest migration	      alembic downgrade -1
+View current DB migration version	alembic current
+Mark DB with current model state	alembic stamp head
+
+📂 Alembic Directory Structure
+bash
+
+alembic/
+├── env.py              # Migration environment config
+├── versions/           # Stores migration files
+├── script.py.mako      # Template for generating migrations
+🧠 Best Practices
+Always review generated migration files for correctness.
+
+Avoid multiple migrations for a single logical change.
+
+Commit your migration files (alembic/versions/*.py) along with code changes.
+
+Ensure teammates pull latest migrations before generating new ones.
+
+🧪 Example Workflow
+Say you add a new bio field to the User model:
+
+Modify models/user.py:
+
+python
+
+bio = Column(Text, nullable=True)
+
+Run:
+
+bash
+
+alembic revision --autogenerate -m "add bio field to user"
+Review the generated migration in alembic/versions/.
+
+Apply it:
+
+bash
+
+alembic upgrade head
+

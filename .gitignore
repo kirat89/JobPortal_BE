@@ -173,3 +173,18 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Pre-commit cache
+.pre-commit-config.yaml
+.pre-commit-hooks.yaml
+.pre-commit/
+
+# MyPy, Flake8, Isort cache
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+flake8.log
+
+# Alembic cache (not usually big, but safe to ignore)
+alembic/__pycache__/
